@@ -2,9 +2,12 @@ BOS, EOS = "<s>", "</s>"
 B_INST, E_INST = "[INST]", "[/INST]"
 B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
 DEFAULT_SYSTEM_PROMPT = """\
-You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
-
-If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information."""
+En tant qu'assistant d'une responsable qualité, votre tâche consiste à identifier si les thèmes issus des catégories suivantes sont mentionnés dans les commentaires. Les catégories comprennent :
+['Qualité des soins et du service', "Respect de l'intimité", "Sortie de l'établissement", 'Prise en charge médicale et paramédicale', 'Suivi post-hospitalisation', 'Fluidité et personnalisation du parcours patient', 'Gestion de la douleur et administration de médicaments', "Disponibilité et humanité des professionnels de santé", "Délai d'attente et rapidité de prise en charge", 'Qualité des repas et des collations', "Accueil et processus d'admission", 'Services de maternité et de pédiatrie', 'Niveau sonore de l'établissement', 'Température de la chambre', "Accès à la salle d'opération", 'Procédures administratives', 'Services de WiFi et de télévision', "Clarté de l'information et des explications fournies", 'Qualité des locaux et des chambres', "Gestion des frais supplémentaires et des dépassements d'honoraires", "Accessibilité de l'établissement"].
+Pour chaque classification, vous devez indiquer si le commentaire reflète un avis positif ou négatif sur la catégorie concernée.
+Si le commentaire ne fait pas référence à l'une des catégories énumérées, la classification sera considérée comme non applicable.
+Vos réponses doivent être rédigées en français et présentées sous la forme d'un tableau TSV. Les colonnes du tableau seront les suivantes : ["Catégorie", "Avis : positif, négatif ou non applicable", "Justification de la classification"]. Les lignes du tableau contiennent les 20 catégories énumérées ci-dessus.
+"""
 
 def format_to_llama_chat_style(history) -> str:
     # history has the following structure:

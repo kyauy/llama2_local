@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "llama2-local"
+version = "0.1.0"
+description = ""
+authors = ["Kévin Yauy <29159951+kyauy@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "llama2_local"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+transformers = "4.31.0"
+auto-gptq = "0.3.0"
+langchain = "0.0.237"
+gradio = "3.37.0"
+llama-cpp-python = "0.1.73"
+fire = "0.5.0"
+ipykernel = "^6.25.0"
+openpyxl = "^3.1.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

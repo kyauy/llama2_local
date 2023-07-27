@@ -17,6 +17,12 @@ class Model_Type(Enum):
     ggml = 2
     full_precision = 3
 
+CSS ="""
+.contain { display: flex; flex-direction: column; }
+.gradio-container { height: 100vh !important; }
+#component-0 { height: 100%; }
+#chatbot { flex-grow: 1; overflow: auto;}
+"""
 
 def get_model_type(model_name):
   if "gptq" in model_name.lower():
@@ -57,8 +63,8 @@ def init_auto_model_and_tokenizer(model_name, model_type, file_name=None):
 
 
 def run_ui(model, tokenizer, is_chat_model, model_type):
-  with gr.Blocks() as demo:
-      chatbot = gr.Chatbot()
+  with gr.Blocks(css=CSS) as demo:
+      chatbot = gr.Chatbot(elem_id="chatbot")
       msg = gr.Textbox()
       clear = gr.Button("Clear")
 
@@ -72,9 +78,9 @@ def run_ui(model, tokenizer, is_chat_model, model_type):
               instruction =  history[-1][0]
 
           history[-1][1] = ""
-          kwargs = dict(temperature=0.6, top_p=0.9)
+          kwargs = dict(temperature=0, top_p=0.9)
           if model_type == Model_Type.ggml:
-              kwargs["max_tokens"] = 512
+              kwargs["max_tokens"] = 5120
               for chunk in model(prompt=instruction, stream=True, **kwargs):
                   token = chunk["choices"][0]["text"]
                   history[-1][1] += token
@@ -83,7 +89,7 @@ def run_ui(model, tokenizer, is_chat_model, model_type):
           else:
               streamer = TextIteratorStreamer(tokenizer, skip_prompt=True, Timeout=5)
               inputs = tokenizer(instruction, return_tensors="pt").to(model.device)
-              kwargs["max_new_tokens"] = 512
+              kwargs["max_new_tokens"] = 5120
               kwargs["input_ids"] = inputs["input_ids"]
               kwargs["streamer"] = streamer
               thread = Thread(target=model.generate, kwargs=kwargs)
